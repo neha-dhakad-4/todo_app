@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{%block title%}TASKS{%endblock%}
+{% block content %}
+
+
+<div class="task-box">
+    <h2>YOUR TASK</h2>
+    <form action="{{url_for('tasks.add_task')}}" method="POST" class="task-form">
+        <input type="text" name="title" placeholder="New task" required>
+        <button type="submit" class="btn">Add</button>
+    </form>
+
+    {% if tasks %}
+    <form action="{{url_for('tasks.clear_tasks')}}" method="post">
+        <button type="submit" class="btn btn-clear">Clear All Tasks</button>
+    </form>
+    <br>
+    <table class="tasks-table">
+        <thead>
+            <tr>
+                <th>Task no.</th>
+                <th>Task</th>
+                <th>Status</th>
+                <th>Change</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks%}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{task.title}}</td>
+                <td><span class="badge {{task.status | lower}}">{{task.status}}</span></td>
+                <td>
+                    <form action="{{url_for('tasks.toggle_status',task_id=task.id)}}" method="post">
+                        <button type="submit" class="btn-small">Next</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{ url_for('tasks.update_task', task_id=task.id) }}" method="POST">
+                        <button class="btn btn-update" type="submit">Update</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST">
+                        <button class="btn btn-delete" type="submit">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No tasks yet.Add one above!</p>
+    {%endif%}
+</div>
+{% endblock %}
