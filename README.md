@@ -75,9 +75,6 @@ TODO_APP/
 
 4. Create a `.env` file in `backend/` containing your MongoDB connection values:
    ```env
-   MONGO_URI=mongodb://localhost:27017
-   DB_NAME=todo_app
-   ```
 
 5. Start the Flask server:
    ```bash
