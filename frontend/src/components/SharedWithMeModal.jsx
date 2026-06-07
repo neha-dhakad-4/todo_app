@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
 const SharedWithMeModal = ({
@@ -18,58 +17,36 @@ const SharedWithMeModal = ({
       )
     );
 
-  
+  const loadSharedLists = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/share/shared-with-me/${currentUser.username}`
+      );
 
-  const fetchSharedLists =
-    async () => {
-
-      try {
-
-        const response =
-          await axios.get(
-            `http://localhost:5000/api/share/shared-with-me/${currentUser.username}`
-          );
-
-        setSharedLists(
-          response.data
-        );
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
-useEffect(() => {
-
-    if (
-      showSharedModal
-    ) {
-
-      fetchSharedLists();
-
+      setSharedLists(response.data);
+    } catch (error) {
+      console.log(error);
     }
+  }, [currentUser.username]);
 
-  }, [showSharedModal]);
-  const handleDelete =
-    async (id) => {
+  useEffect(() => {
+    if (!showSharedModal) return;
 
-      try {
+    loadSharedLists();
+  }, [showSharedModal, loadSharedLists]);
 
-        await axios.delete(
-          `http://localhost:5000/api/share/delete-shared-list/${id}`
-        );
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/share/delete-shared-list/${id}`
+      );
 
-        fetchSharedLists();
+      loadSharedLists();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
-
- 
   if (!showSharedModal) return null;
 
   return (

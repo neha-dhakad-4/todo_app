@@ -38,7 +38,19 @@ const Dashboard = () => {
   useEffect(() => {
     if (!user) return;
 
-    fetchTasks();
+    const load = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/tasks/assigned-tasks/${user.username}`
+        );
+
+        setTasks(response.data);
+      } catch (error) {
+        console.error("Fetch tasks failed:", error);
+      }
+    };
+
+    load();
   }, [user]);
 
   const handleLogout = () => {
@@ -50,7 +62,6 @@ const Dashboard = () => {
 
     if (!taskId) {
       console.error("Delete failed: missing task id", task);
-      alert("Unable to delete task: missing task ID");
       return;
     }
 
@@ -69,16 +80,12 @@ const Dashboard = () => {
         `http://localhost:5000/api/tasks/delete-task/${taskId}`
       );
 
-      alert(response.data.message);
+      console.log(response.data.message);
 
       loadTasks(user?.username);
 
     } catch (error) {
       console.error("Delete request failed:", error);
-      alert(
-        error.response?.data?.message ||
-        "Task delete failed"
-      );
     }
   };
 

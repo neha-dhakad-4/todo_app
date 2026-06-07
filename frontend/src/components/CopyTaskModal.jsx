@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 const CopyTaskModal = ({
   showCopyModal,
@@ -12,6 +13,10 @@ const CopyTaskModal = ({
     useState("");
 
   const handleCopy = async () => {
+    if (!selectedTask?._id) {
+      console.error("No task selected to copy");
+      return;
+    }
 
     try {
 
@@ -22,7 +27,7 @@ const CopyTaskModal = ({
         }
       );
 
-      alert("Task copied successfully");
+      console.log("Task copied successfully");
 
       refreshTasks();
 
@@ -33,7 +38,7 @@ const CopyTaskModal = ({
     }
   };
 
-  if (!showCopyModal) return null;
+  if (!showCopyModal || !selectedTask) return null;
 
   return (
     <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4">
@@ -83,6 +88,16 @@ const CopyTaskModal = ({
 
     </div>
   );
+};
+
+CopyTaskModal.propTypes = {
+  showCopyModal: PropTypes.bool.isRequired,
+  setShowCopyModal: PropTypes.func.isRequired,
+  selectedTask: PropTypes.shape({
+    _id: PropTypes.string,
+    taskName: PropTypes.string,
+  }).isRequired,
+  refreshTasks: PropTypes.func.isRequired,
 };
 
 export default CopyTaskModal;

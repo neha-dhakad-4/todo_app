@@ -20,53 +20,36 @@ const ShareListModal = ({
     );
 
   useEffect(() => {
+    if (!showShareModal) return;
 
-    if (showShareModal) {
-      fetchUsers();
-    }
-
-  }, [showShareModal]);
-
-  const fetchUsers = async () => {
-
-    try {
-
-      const response =
-        await axios.get(
+    const loadUsers = async () => {
+      try {
+        const response = await axios.get(
           "http://localhost:5000/api/auth/users"
         );
 
-      const filteredUsers =
-        response.data.filter(
-          (user) =>
-            user.username !==
-            currentUser.username
+        const filteredUsers = response.data.filter(
+          (user) => user.username !== currentUser.username
         );
 
-      setUsers(
-        filteredUsers
-      );
+        setUsers(filteredUsers);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    } catch (error) {
-
-      console.log(error);
-
-    }
-  };
+    loadUsers();
+  }, [showShareModal, currentUser.username]);
 
   const handleShare = async () => {
 
     if (!selectedUser) {
-      alert(
-        "Please select a user"
-      );
+      console.error("Please select a user");
       return;
     }
 
     if (tasks.length === 0) {
-      alert(
-        "No tasks available to share"
-      );
+      console.error("No tasks available to share");
       return;
     }
 
@@ -101,7 +84,7 @@ const ShareListModal = ({
           }
         );
 
-      alert(
+      console.log(
         response.data.message
       );
 
@@ -114,12 +97,6 @@ const ShareListModal = ({
     } catch (error) {
 
       console.log(error);
-
-      alert(
-        error?.response?.data
-          ?.message ||
-          "Failed to share list"
-      );
     }
   };
 

@@ -29,7 +29,7 @@ const Register = () => {
       }
     );
 
-    alert(response.data.message);
+    console.log(response.data.message);
 
     setFormData({
       username: "",
@@ -41,11 +41,6 @@ const Register = () => {
 
   } catch (error) {
     console.error(error);
-
-    alert(
-      error.response?.data?.message ||
-      "Registration failed"
-    );
   }
 };
 

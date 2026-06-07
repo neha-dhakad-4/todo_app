@@ -1,6 +1,7 @@
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 const CreateTaskModal = ({
   showModal,
@@ -20,24 +21,25 @@ const CreateTaskModal = ({
     assignedTo: "",
   });
 
-  const fetchUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/auth/users"
       );
 
-      const filteredUsers = response.data
+      const filteredUsers = response.data;
 
-      setUsers(filteredUsers);
+      Promise.resolve().then(() => setUsers(filteredUsers));
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [currentUser.username]);
+
   useEffect(() => {
-    if (showModal) {
-      fetchUsers();
-    }
-  }, [showModal]);
+    if (!showModal) return;
+
+    loadUsers();
+  }, [showModal, loadUsers]);
 
   
 
@@ -63,7 +65,7 @@ const CreateTaskModal = ({
       payload
     );
 
-    alert(response.data.message);
+    console.log(response.data.message);
 
     setShowModal(false);
 
@@ -198,6 +200,12 @@ const CreateTaskModal = ({
 
     </div>
   );
+};
+
+CreateTaskModal.propTypes = {
+  showModal: PropTypes.bool.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  onTaskCreated: PropTypes.func,
 };
 
 export default CreateTaskModal;

@@ -30,8 +30,6 @@ const Login = () => {
 
     console.log(response.data);
 
-    alert(response.data.message);
-
     localStorage.setItem(
       "user",
       JSON.stringify(response.data.user)
@@ -41,11 +39,6 @@ const Login = () => {
 
   } catch (error) {
     console.error(error);
-
-    alert(
-      error.response?.data?.message ||
-      "Login failed"
-    );
   }
 };
 
