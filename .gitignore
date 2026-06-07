@@ -6,7 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+backend/__pycache__
+backend/routes/__pycache__
 node_modules
 dist
 dist-ssr
