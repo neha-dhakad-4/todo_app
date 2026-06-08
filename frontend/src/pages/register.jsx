@@ -29,7 +29,8 @@ const Register = () => {
       }
     );
 
-    console.log(response.data.message);
+    // show success alert
+    alert(response.data?.message ?? "Registration successful");
 
     setFormData({
       username: "",
@@ -40,6 +41,9 @@ const Register = () => {
     navigate("/login");
 
   } catch (error) {
+    // show server-provided message if available, otherwise a generic one
+    const msg = error.response?.data?.message ?? error.message ?? "Registration failed";
+    alert(msg);
     console.error(error);
   }
 };

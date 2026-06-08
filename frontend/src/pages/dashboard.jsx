@@ -90,11 +90,33 @@ const Dashboard = () => {
   };
 
   const handleCopy = (task) => {
+    setSelectedTask(task);
+    setShowCopyModal(true);
+  };
 
-  setSelectedTask(task);
+  const handleStatusChange = async (task) => {
+    const taskId = task._id || task.taskId;
 
-  setShowCopyModal(true);
-};
+    if (!taskId) {
+      console.error("Status update failed: missing task id", task);
+      return;
+    }
+
+    if (task.status === "done") {
+      return;
+    }
+
+    try {
+      await axios.patch(
+        `http://localhost:5000/api/tasks/update-task-status/${taskId}`,
+        { status: "done" }
+      );
+
+      await loadTasks(user?.username);
+    } catch (error) {
+      console.error("Status update request failed:", error);
+    }
+  };
 
   const handleShare = () => {
     console.log("Share List");
@@ -146,6 +168,7 @@ const Dashboard = () => {
             tasks={tasks}
             onDelete={handleDelete}
             onCopy={handleCopy}
+            onStatusChange={handleStatusChange}
             onShare={handleShare}
           />
         </div>

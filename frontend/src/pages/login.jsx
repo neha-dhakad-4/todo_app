@@ -28,7 +28,8 @@ const Login = () => {
       }
     );
 
-    console.log(response.data);
+    // show success alert
+    alert("Login successful");
 
     localStorage.setItem(
       "user",
@@ -38,6 +39,9 @@ const Login = () => {
     navigate("/dashboard");
 
   } catch (error) {
+    // try to show server-provided message, otherwise generic
+    const msg = error.response?.data?.message ?? error.message ?? "Login failed";
+    alert(msg);
     console.error(error);
   }
 };

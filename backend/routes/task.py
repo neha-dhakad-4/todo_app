@@ -77,6 +77,29 @@ def delete_task(task_id):
     }), 200
 
 @tasks_bp.route(
+    "/update-task-status/<task_id>",
+    methods=["PATCH"]
+)
+def update_task_status(task_id):
+    data = request.json or {}
+    new_status = data.get("status", "done")
+
+    result = tasks.update_one(
+        {"_id": ObjectId(task_id)},
+        {"$set": {"status": new_status}}
+    )
+
+    if result.matched_count == 0:
+        return jsonify({
+            "message": "Task not found"
+        }), 404
+
+    return jsonify({
+        "message": "Task status updated successfully",
+        "status": new_status
+    }), 200
+
+@tasks_bp.route(
     "/copy-task/<task_id>",
     methods=["POST"]
 )

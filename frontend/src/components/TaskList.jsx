@@ -1,12 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import TaskTable from "./TaskTable";
 import TodayTasks from "./TodayTasks";
 import ShareListModal from "./shareListModel";
+
 const TaskList = ({
   tasks,
   onDelete,
   onCopy,
+  onStatusChange,
 }) => {
   const [showShareModal, setShowShareModal] =
   useState(false);
@@ -47,7 +49,7 @@ const TaskList = ({
     });
 
   return (
-    <>
+    <React.Fragment>
       <div className="bg-white rounded-xl shadow p-4 sm:p-5 w-full">
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -90,6 +92,7 @@ const TaskList = ({
               tasks={filteredTasks}
               onDelete={onDelete}
               onCopy={onCopy}
+              onStatusChange={onStatusChange}
             />
           )}
 
@@ -102,7 +105,7 @@ const TaskList = ({
         setShowShareModal={setShowShareModal}
         tasks={filteredTasks}
       />
-    </>
+    </React.Fragment>
   );
 };
 
@@ -110,6 +113,7 @@ TaskList.propTypes = {
   tasks: PropTypes.array.isRequired,
   onDelete: PropTypes.func.isRequired,
   onCopy: PropTypes.func.isRequired,
+  onStatusChange: PropTypes.func,
 };
 
 export default TaskList;

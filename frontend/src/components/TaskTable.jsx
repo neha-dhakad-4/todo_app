@@ -1,7 +1,10 @@
+import PropTypes from "prop-types";
+
 const TaskTable = ({
   tasks,
   onDelete,
   onCopy,
+  onStatusChange,
 }) => {
 
   if (tasks.length === 0) {
@@ -27,7 +30,21 @@ const TaskTable = ({
               <td className="p-3">{task.taskName}</td>
               <td className="p-3">{task.dueDate}</td>
               <td className="p-3">{task.dueTime}</td>
-              <td className="p-3">{task.status}</td>
+              <td className="p-3">
+                {task.status === "done" ? (
+                  <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                    Done
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => onStatusChange?.(task)}
+                    className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-900 hover:bg-yellow-200"
+                  >
+                    Mark done
+                  </button>
+                )}
+              </td>
               <td className="p-3">
                 <div className="flex justify-center gap-2">
                   <button onClick={() => onCopy(task)} className="bg-blue-600 text-white px-3 py-1 rounded">
@@ -44,6 +61,19 @@ const TaskTable = ({
       </table>
     </div>
   );
+};
+
+TaskTable.propTypes = {
+  tasks: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    taskName: PropTypes.string,
+    dueDate: PropTypes.string,
+    dueTime: PropTypes.string,
+    status: PropTypes.string,
+  })).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onCopy: PropTypes.func.isRequired,
+  onStatusChange: PropTypes.func,
 };
 
 export default TaskTable;

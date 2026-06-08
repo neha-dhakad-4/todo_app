@@ -1,9 +1,11 @@
+import PropTypes from "prop-types";
 import TaskTable from "./TaskTable";
 
 const TodayTasks = ({
   tasks,
   onDelete,
   onCopy,
+  onStatusChange,
 }) => {
 
   const getTimeSlot = (time) => {
@@ -72,6 +74,7 @@ const TodayTasks = ({
             tasks={morningTasks}
             onDelete={onDelete}
             onCopy={onCopy}
+            onStatusChange={onStatusChange}
           />
 
         </div>
@@ -88,6 +91,7 @@ const TodayTasks = ({
             tasks={afternoonTasks}
             onDelete={onDelete}
             onCopy={onCopy}
+            onStatusChange={onStatusChange}
           />
 
         </div>
@@ -104,6 +108,7 @@ const TodayTasks = ({
             tasks={eveningTasks}
             onDelete={onDelete}
             onCopy={onCopy}
+            onStatusChange={onStatusChange}
           />
 
         </div>
@@ -120,6 +125,7 @@ const TodayTasks = ({
             tasks={nightTasks}
             onDelete={onDelete}
             onCopy={onCopy}
+            onStatusChange={onStatusChange}
           />
 
         </div>
@@ -127,6 +133,13 @@ const TodayTasks = ({
 
     </div>
   );
+};
+
+TodayTasks.propTypes = {
+  tasks: PropTypes.array.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onCopy: PropTypes.func.isRequired,
+  onStatusChange: PropTypes.func,
 };
 
 export default TodayTasks;
